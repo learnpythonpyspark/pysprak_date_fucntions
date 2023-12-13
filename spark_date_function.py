@@ -147,3 +147,15 @@ if __name__ == "__main__":
     impala_table = "your_impala_table"
     read_from_table(spark, impala_database, impala_table)
     spark.stop()
+
+
+
+#######
+Version 2.7
+
+patterns = [
+        r"\w+\.\w+\s+(BETWEEN)\s+'(\d{4}-\d{2}-\d{2})'\s+AND\s+'(\d{4}-\d{2}-\d{2})'",
+        r"\w+\.\w+\s+(>=|>|<=|<|=|!=|=>)\s+'(\d{4}-\d{2}-\d{2})'",
+        r"\w+\.\w+\s+(>=|>|<=|<|=|!=|=>)\s+(CURRENT_DATE|NOW|DATE|CURRENT_TIMESTAMP|TO_DATE|UNIX_TIMESTAMP|FROM_UNIXTIME|now|from_unixtime|unix_timestamp|to_date|year|quarter|month|day|dayofmonth|hour|minute|second|weekofyear|extract|current_date|date_add|date_sub|add_months|trunc)",
+        r"\w+\.\w+\s+(BETWEEN)\s+'(\d{4}-\d{2}-\d{2})'\s+AND\s+(CURRENT_DATE|NOW|DATE|CURRENT_TIMESTAMP|TO_DATE|UNIX_TIMESTAMP|FROM_UNIXTIME|now|from_unixtime|unix_timestamp|to_date|year|quarter|month|day|dayofmonth|hour|minute|second|weekofyear|extract|current_date|date_add|date_sub|add_months|trunc)"
+    ]
