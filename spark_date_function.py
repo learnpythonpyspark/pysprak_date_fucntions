@@ -153,9 +153,19 @@ if __name__ == "__main__":
 #######
 Version 2.7
 
-patterns = [
-        r"\w+\.\w+\s+(BETWEEN)\s+'(\d{4}-\d{2}-\d{2})'\s+AND\s+'(\d{4}-\d{2}-\d{2})'",
-        r"\w+\.\w+\s+(>=|>|<=|<|=|!=|=>)\s+'(\d{4}-\d{2}-\d{2})'",
-        r"\w+\.\w+\s+(>=|>|<=|<|=|!=|=>)\s+(CURRENT_DATE|NOW|DATE|CURRENT_TIMESTAMP|TO_DATE|UNIX_TIMESTAMP|FROM_UNIXTIME|now|from_unixtime|unix_timestamp|to_date|year|quarter|month|day|dayofmonth|hour|minute|second|weekofyear|extract|current_date|date_add|date_sub|add_months|trunc)",
-        r"\w+\.\w+\s+(BETWEEN)\s+'(\d{4}-\d{2}-\d{2})'\s+AND\s+(CURRENT_DATE|NOW|DATE|CURRENT_TIMESTAMP|TO_DATE|UNIX_TIMESTAMP|FROM_UNIXTIME|now|from_unixtime|unix_timestamp|to_date|year|quarter|month|day|dayofmonth|hour|minute|second|weekofyear|extract|current_date|date_add|date_sub|add_months|trunc)"
-    ]
+    #final_df_selected = replace_alias_with_table_name(final_df_selected, 'statement', 'date_columns')
+
+    sample_df = df.withColumn('tables_name', extract_table_names('statement'))
+    exploded_df = sample_df.select('user', explode(split('tables_name', ',')).alias('tables_name'),  'pool', 'querystate', 'starttime', 'endtime', 'xtrct_date', 'statement', current_timestamp().alias('asofdate'))
+    final_df_selected = exploded_df.withColumn('split_col', when(col('tables_name').contains('.'), split(exploded_df['tables_name'], '\.')))
+    final_df_selected = final_df_selected.withColumn('schema', when(size(final_df_selected['split_col']) == 2, final_df_selected['split_col'].getItem(0)))
+    final_df_selected = final_df_selected.withColumn('table', when(size(final_df_selected['split_col']) == 2, final_df_selected['split_col'].getItem(1)).otherwise(final_df_selected['tables_name']))
+    final_df_selected = final_df_selected.withColumn("date_operators", find_date_operators("statement")) \
+                        .withColumn("date_columns", find_columns("statement")) \
+                        .withColumn("date_range", find_dates_and_date_range("statement"))
+    #display(final_df_selected.toPandas())
+    #time.sleep(45)
+
+
+    final_df1 = final_df_selected.select('user', 'tables_name', 'schema', 'table', 'date_operators','date_columns','date_range',  'pool', 'querystate')
+    final_df1 = add_layer_column(final_df1)
