@@ -1,0 +1,8 @@
+CREATE GLOBAL SCHEMA_CHANGE JOB add_si_and_rename_account_id FOR GRAPH <graph_name> {
+  ALTER VERTEX aacc {
+    ADD ATTRIBUTE si STRING;
+    CHANGE ATTRIBUTE account_id STRING TO account_number STRING;
+  }
+}
+
+RUN GLOBAL SCHEMA_CHANGE JOB add_si_and_rename_account_id;
