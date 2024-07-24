@@ -1,3 +1,11 @@
+import ast
+import pandas as pd
+from datetime import datetime
+from IPython.display import display, HTML
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
+
 html = theBody(fName, alert_data, env, load_date)
 
 # Display the HTML content (for Jupyter Notebook)
