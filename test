@@ -18,9 +18,9 @@ result['html'] += disclaimer
 html_content = result['html']
 
 # Email setup
-sender = 'zx@gmail.com'
+sender = 'zx@asdf.com'
 recipient = ['zx@gmail.com']  # List of recipients
-additional_email = '560@gmail.com'
+additional_email = '560@asdf.com'
 
 subject = 'ABC: adef'
 
@@ -36,7 +36,7 @@ msg.attach(MIMEText(html_content, 'html'))
 
 smtp_server = 'smtp.xyzabc.com'
 smtp_port = 123
-smtp_username = 'zx@gmail.com'
+smtp_username = 'zx@asdf.com'
 smtp_password = '12345678'
 
 with smtplib.SMTP(smtp_server, smtp_port) as smtp:
