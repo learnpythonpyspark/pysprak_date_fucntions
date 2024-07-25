@@ -1,46 +1,9 @@
-import pandas as pd
+agg_funcs = {
+    "status": lambda x: "fail" if "fail" in x.values else "pass",
+    "component_typr": "first",
+    "source": lambda x: ','.join(x.unique()),
+    "replica_number": "count",
+    "record_count": lambda x: ','.join(map(str, x.unique()))
+}
 
-def read_custom_table(file_content):
-    lines = file_content.strip().split('\n')
-    data = []
-    headers = None
-    
-    for line in lines:
-        if line.startswith('+') or set(line) == {'+', '-'}:
-            continue
-        if not headers:
-            headers = [col.strip() for col in line.split('|') if col.strip()]
-            continue
-        
-        row = [col.strip() for col in line.split('|') if col.strip()]
-        if len(row) == len(headers) and row != headers:  
-            data.append(row)
-    
-    if not headers:
-        print("No header row found in the file content")
-        return None
-    
-    if not data:
-        print("No data rows found in the file content")
-        return None
-    
-    return pd.DataFrame(data, columns=headers)
-
-# Read the file
-try:
-    with open('abc.txt', 'r') as file:
-        file_content = file.read()
-
-    # Process the file content
-    df = read_custom_table(file_content)
-    
-    if df is not None:
-        print("DataFrame created successfully:")
-        print(df)
-    else:
-        print("Failed to create DataFrame.")
-
-except FileNotFoundError:
-    print("The file 'asdf.txt' was not found. Please check the file name and path.")
-except Exception as e:
-    print(f"An error occurred while reading the file: {e}")
+final_df = df.groupby("componenent_name").agg(agg_funcs).reset_index()
