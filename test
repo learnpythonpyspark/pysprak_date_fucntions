@@ -1,54 +1,32 @@
-import ast
 import pandas as pd
-from datetime import datetime
-from IPython.display import display, HTML
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import smtplib
 
-html = theBody(fName, alert_data, env, load_date)
+def read_custom_table(file_content):
+    lines = file_content.strip().split('\n')
+    data = []
+    headers = None
+    header_count = 0
+    
+    for line in lines:
+        if line.startswith('+'):
+            continue
+        if 'cola.' in line:
+            header_count += 1
+            if header_count == 1:
+                headers = [col.strip() for col in line.split('|') if col.strip()]
+                headers = [h[:-1] if h.endswith('.') else h for h in headers]
+            continue
+        
+        row = [col.strip() for col in line.split('|') if col.strip()]
+        if len(row) == len(headers):
+            data.append(row)
+    
+    return pd.DataFrame(data, columns=headers)
 
-# Display the HTML content (for Jupyter Notebook)
-display(HTML(result['html']))
 
-# Get the result from theBody function
-result = theBody(fName, alert_data, env, load_date)
 
-# Add disclaimer to the HTML content
-disclaimer = """
+with open('asdf.txt', 'r') as file:
+    file_content = file.read()
 
-"""
+df = read_custom_table(file_content)
 
-# Append the disclaimer to the HTML content in the result dictionary
-result['html'] += disclaimer
-
-# Use result['html'] for the email body
-html_content = result['html']
-
-# Email setup
-sender = 'zx@asdf.com'
-recipient = ['zx@gmail.com']  # List of recipients
-additional_email = '560@asdf.com'
-
-subject = 'ABC: adef'
-
-msg = MIMEMultipart()
-msg['Subject'] = subject
-msg['From'] = sender
-msg['To'] = sender  # Set 'To' header to only show sender's email address
-
-# Concatenate all recipient emails into one string (excluding sender's email)
-recipient_str = ', '.join(recipient + [additional_email])
-
-msg.attach(MIMEText(html_content, 'html'))
-
-smtp_server = 'smtp.xyzabc.com'
-smtp_port = 123
-smtp_username = 'zx@asdf.com'
-smtp_password = '12345678'
-
-with smtplib.SMTP(smtp_server, smtp_port) as smtp:
-    smtp.starttls()
-    smtp.login(smtp_username, smtp_password)
-    smtp.sendmail(sender, recipient + [additional_email], msg.as_string())
-    print('Email sent successfully!')
+print(df)
