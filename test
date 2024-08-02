@@ -1,9 +1,17 @@
-agg_funcs = {
-    "status": lambda x: "fail" if "fail" in x.values else "pass",
-    "component_typr": "first",
-    "source": lambda x: ','.join(x.unique()),
-    "replica_number": "count",
-    "record_count": lambda x: ','.join(map(str, x.unique()))
-}
+df1 = pd.DataFrame(data1)
+df2 = pd.DataFrame(data2)
 
-final_df = df.groupby("componenent_name").agg(agg_funcs).reset_index()
+df_combined = pd.concat([df1, df2])
+
+df_grouped = df_combined.groupby(['component_type', 'component_name', 'source']).agg(min_record_count=('record_count', 'min'),max_record_count=('record_count', 'max')).reset_index()
+
+df_grouped['status'] = df_grouped.apply(lambda row: 'Pass' if row['min_record_count'] == row['max_record_count'] else 'Failed', axis=1)
+
+final_df = pd.merge(df_combined, df_grouped[['component_type', 'component_name', 'source', 'status']], on=['component_type', 'component_name', 'source'])
+
+if 'Failed' in final_df['status'].values:
+    final_df = final_df.sort_values(by=['status', 'component_type', 'component_name', 'source', 'replica_number'])
+    final_df = final_df[['status', 'component_type', 'component_name', 'source', 'replica_number', 'record_count']]
+    print(final_df)
+else:
+    print("No mismatches found. All records passed.")
