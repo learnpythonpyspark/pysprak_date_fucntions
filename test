@@ -15,3 +15,9 @@ if 'Failed' in final_df['status'].values:
     print(final_df)
 else:
     print("No mismatches found. All records passed.")
+def generate_primary_key(row_index, prefix="TGHM"):
+    timestamp = datetime.now().strftime("%y%m%d%H%M%S%f")
+    random_string = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    return f"{prefix}{timestamp}{random_string}{row_index:03d}"
+
+df_copy['PrimaryKey'] = [generate_primary_key(i) for i in range(len(df_copy))]
