@@ -50,3 +50,30 @@ oad_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     </body>
     </html>
     """
+html_content += f"""
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #3498db; font-size: 18px; margin: 20px 0 10px 0; border-bottom: 2px solid #3498db; padding-bottom: 5px;">{key}</h3>
+                <div style="overflow-x: auto;">
+                    <table cellspacing="0" cellpadding="10" style="width:100%; border-collapse: collapse; border: 1px solid #e0e0e0; font-size: 13px;">
+                        <thead>
+                            <tr style="background-color: #f1f8ff;">
+                                {"".join(f'<th style="text-align: left; border: 1px solid #e0e0e0; white-space: nowrap;">{col}</th>' for col in df.columns)}
+                            </tr>
+                        </thead>
+                        <tbody>
+            """
+            
+            for i, row in df.iterrows():
+                html_content += f"""
+                    <tr style="background-color: {"#f8f9fa" if i%2 else "#ffffff"};">
+                        {"".join(f'<td style="border: 1px solid #e0e0e0; white-space: nowrap;">{str(val)}</td>' for val in row)}
+                    </tr>
+                """
+            
+            html_content += """
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            """
+    return html_content
