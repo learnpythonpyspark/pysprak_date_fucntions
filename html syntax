@@ -1,79 +1,8 @@
-oad_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    data = ast.literal_eval(alert_data)
-    
-    tables_html = generate_html_tables(data)
-    
-    alert_status = "PASS" if report.lower() == "okay" else "FAIL"
-    alert_color = "#4CAF50" if alert_status == "PASS" else "#FF0000"
-    
-    htmlBody = f"""
-    <html>
-    <head>
-        <meta charset="utf-8">
-        
-    </head>
-    <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; line-height: 1.6; color: #333; background-color: #f6f6f6; margin: 0; padding: 0;">
-        <div style="max-width: 800px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden;">
-            <div style="background-color: #3498db; color: #ffffff; padding: 20px; text-align: center;">
-                <h1 style="margin: 0; font-size: 24px; font-weight: 500;">xyz</h1>
-            </div>
-            
-            <div style="padding: 20px;">
-                <p style="margin-top: 0;">Hello {fName},</p>
-                
-                <div style="background-color: #f8f9fa; border-left: 4px solid {alert_color}; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
+
+                <div style="background-color: #f8f9fa; border-left: 4px solid {fghf}; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
                     <strong style="font-size: 16px;">Status:</strong> 
-                    <span style="color: {alert_color}; font-weight: bold; font-size: 16px;">{alert_status}</span>
+                    <span style="color: {alert_color}; font-weight: bold; font-size: 16px;">{dfgdf}</span>
                 </div>
                 
-                <table cellspacing="0" cellpadding="8" style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
-                    <tr style="background-color: #f1f8ff;">
-                        <td style="font-weight: bold; width: 40%;">Report Date:</td>
-                        <td>{load_date}</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: bold; width: 40%;">Environment:</td>
-                        <td>{env.upper()}</td>
-                    </tr>
-                </table>
-                
-                <div style="margin-top: 20px;">
-                    {tables_html}
-                </div>
-            </div>
-            
-            <div style="background-color: #f6f6f6; color: #777; font-size: 12px; text-align: center; padding: 10px; margin-top: 20px;">
-                This is an automated report. Please do not reply to this email.
-            </div>
-        </div>
-    </body>
-    </html>
-    """
-html_content += f"""
-            <div style="margin-bottom: 30px;">
-                <h3 style="color: #3498db; font-size: 18px; margin: 20px 0 10px 0; border-bottom: 2px solid #3498db; padding-bottom: 5px;">{key}</h3>
-                <div style="overflow-x: auto;">
-                    <table cellspacing="0" cellpadding="10" style="width:100%; border-collapse: collapse; border: 1px solid #e0e0e0; font-size: 13px;">
-                        <thead>
-                            <tr style="background-color: #f1f8ff;">
-                                {"".join(f'<th style="text-align: left; border: 1px solid #e0e0e0; white-space: nowrap;">{col}</th>' for col in df.columns)}
-                            </tr>
-                        </thead>
-                        <tbody>
-            """
-            
-            for i, row in df.iterrows():
-                html_content += f"""
-                    <tr style="background-color: {"#f8f9fa" if i%2 else "#ffffff"};">
-                        {"".join(f'<td style="border: 1px solid #e0e0e0; white-space: nowrap;">{str(val)}</td>' for val in row)}
-                    </tr>
-                """
-            
-            html_content += """
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            """
-    return html_content
+
+
